@@ -1,9 +1,9 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
-console.log("process.env.FACEBOOK_APP_ID",process.env.FACEBOOK_APP_ID)
-console.log("process.env.FACEBOOK_APP_SECRET",process.env.FACEBOOK_APP_SECRET)
-console.log("process.env.FACEBOOK_CALLBACK_URL",process.env.FACEBOOK_CALLBACK_URL)
+// console.log("process.env.FACEBOOK_APP_ID",process.env.FACEBOOK_APP_ID)
+// console.log("process.env.FACEBOOK_APP_SECRET",process.env.FACEBOOK_APP_SECRET)
+// console.log("process.env.FACEBOOK_CALLBACK_URL",process.env.FACEBOOK_CALLBACK_URL)
 passport.use(
   new FacebookStrategy(
     {

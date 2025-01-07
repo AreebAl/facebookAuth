@@ -6,6 +6,8 @@ const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
+app.use(express.json());
+
 // Middleware for sessions
 app.use(
   session({

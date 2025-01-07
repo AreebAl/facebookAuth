@@ -17,6 +17,7 @@ const {
   facebookCallback,
   dashboard,
   logout,
+  getInsights,
 } = require('../controllers/auth.controller');
 const ensureAuth = require('../middlewares/ensureAuth');
 
@@ -30,6 +31,10 @@ router.get('/facebook/callback', facebookCallback);
 
 // Dashboard (Protected Route)
 router.get('/dashboard', ensureAuth, dashboard);
+
+
+// Insights (Fetch insights for given date range)
+router.post('/insights', ensureAuth, getInsights);
 
 // Logout
 router.get('/logout', logout);
