@@ -3,6 +3,9 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const authRoutes = require('./routes/auth.routes');
+const httpsLocalhost = require('https-localhost')();
+const https = require('https');
+
 
 const app = express();
 
@@ -32,5 +35,14 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+
+httpsLocalhost.getCerts().then(({ key, cert }) => {
+  https.createServer({ key, cert }, app).listen(3000, () => {
+    console.log('HTTPS server is running on https://localhost:3000');
+  });
+}).catch((err) => {
+  console.error('Error generating local HTTPS certificates:', err);
+});

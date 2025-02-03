@@ -44,7 +44,7 @@ async function getAdInsights(adAccountId, accessToken, startDate, endDate) {
 
 
 exports.loginWithFacebook = (req, res, next) => {
-    passport.authenticate('facebook', { scope: ['email', 'ads_management', 'business_management'] })(req, res, next);
+    passport.authenticate('facebook', { scope: ['email', 'ads_read','ads_management', 'business_management'] })(req, res, next);
   };
   
 
