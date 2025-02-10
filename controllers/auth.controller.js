@@ -70,7 +70,9 @@ exports.facebookCallback = (req, res, next) => {
           return next(loginErr);
         }
         console.log("User successfully logged in:", user);
-        return res.redirect('/auth/dashboard');
+        const accessToken = user.accessToken; 
+        return res.redirect(`/auth/dashboard?access_token=${accessToken}`);
+        
       });
     })(req, res, next);
   };
