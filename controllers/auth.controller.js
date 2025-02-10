@@ -443,3 +443,37 @@ exports.getInsights = async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch insights' });
     }
   };
+
+
+  exports.getInsightsForFacebook = async (req, res) => {
+    console.log("inside getInsights")
+    let { startDate, endDate } = req.body;
+
+    if (!startDate || !endDate) {
+      const today = new Date().toISOString().split("T")[0];
+      startDate = today;
+      endDate = today;
+    }
+    
+    console.log("startDate:", startDate);
+    console.log("endDate:", endDate);
+    // const user = req.user;
+    // const accessToken = user.accessToken; // Assuming the accessToken is saved in the session
+    const accessToken=req.headers.authorization
+    console.log("insights accessToken",accessToken)
+  
+    try {
+      // Fetch the user's Ad Account ID
+      const adAccountId = await getAdAccountId(accessToken);
+      console.log("Fetched Ad Account ID:", adAccountId);
+  
+      // Fetch insights for the Ad Account ID and the specified date range
+      const insightsData = await getAdInsights(adAccountId, accessToken, startDate, endDate);
+      console.log("insightsData",insightsData)
+      res.json(insightsData); // Return insights data to the frontend
+    } catch (err) {
+      console.error('Error fetching insights:', err);
+      res.status(500).json({ error: 'Failed to fetch insights' });
+    }
+  };
+

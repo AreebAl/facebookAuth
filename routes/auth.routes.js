@@ -18,6 +18,7 @@ const {
   dashboard,
   logout,
   getInsights,
+  getInsightsForFacebook,
 } = require('../controllers/auth.controller');
 const ensureAuth = require('../middlewares/ensureAuth');
 
@@ -36,8 +37,13 @@ router.get('/dashboard', ensureAuth, dashboard);
 // Insights (Fetch insights for given date range)
 router.post('/insights', ensureAuth, getInsights);
 
+router.post('/insightsFacebook', getInsightsForFacebook);
+
+
 // Logout
 router.get('/logout', logout);
+
+
 
 module.exports = router;
 
