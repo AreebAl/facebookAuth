@@ -44,7 +44,7 @@ async function getAdInsights(adAccountId, accessToken, startDate, endDate) {
 
 
 exports.loginWithFacebook = (req, res, next) => {
-    passport.authenticate('facebook', { scope: ['email', 'ads_read','ads_management', 'business_management'] })(req, res, next);
+    passport.authenticate('facebook', { scope: ['email', 'ads_read','ads_management', 'business_management','public_profile'] })(req, res, next);
   };
   
 
@@ -125,127 +125,253 @@ exports.facebookCallback = (req, res, next) => {
     //   });
     // </script>
     // `);
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Dashboard</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background: linear-gradient(135deg, #4267b2, #3b5998);
-              color: #fff;
-              text-align: center;
-              padding: 20px;
-            }
-            .container {
-              background: #ffffff;
-              color: #333;
-              border-radius: 10px;
-              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-              padding: 30px 20px;
-              max-width: 600px;
-              margin: 50px auto;
-            }
-            h1 {
-              font-size: 24px;
-              margin-bottom: 20px;
-            }
-            p {
-              font-size: 16px;
-              margin: 10px 0;
-            }
-            img {
-              border-radius: 50%;
-              width: 100px;
-              height: 100px;
-              margin-bottom: 20px;
-            }
-            button {
-              background-color: #4267b2;
-              color: white;
-              padding: 10px 20px;
-              border: none;
-              border-radius: 5px;
-              cursor: pointer;
-              font-size: 16px;
-              margin-top: 20px;
-              transition: background-color 0.3s ease, transform 0.2s ease;
-            }
-            button:hover {
-              background-color: #365899;
-              transform: translateY(-2px);
-            }
-            button:active {
-              transform: translateY(1px);
-            }
-            label, input {
-              display: block;
-              margin: 10px auto;
-              font-size: 14px;
-            }
-            input {
-              padding: 5px;
-              border-radius: 5px;
-              border: 1px solid #ddd;
-              width: 80%;
-              max-width: 300px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>Welcome ${user.profile.displayName}</h1>
-            <img src="${user.profile.photos[0].value}" alt="Profile Picture" />
-            <p><strong>Name:</strong> ${user.profile.displayName}</p>
-            <p><strong>Email:</strong> ${user.profile.emails[0].value}</p>
-            <p><strong>Facebook ID:</strong> ${user.profile.id}</p>
-            <a href="/auth/logout">
-              <button>Logout</button>
-            </a>
+    // res.send(`
+    //     <!DOCTYPE html>
+    //     <html lang="en">
+    //     <head>
+    //       <meta charset="UTF-8">
+    //       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    //       <title>Dashboard</title>
+    //       <style>
+    //         body {
+    //           font-family: Arial, sans-serif;
+    //           background: linear-gradient(135deg, #4267b2, #3b5998);
+    //           color: #fff;
+    //           text-align: center;
+    //           padding: 20px;
+    //         }
+    //         .container {
+    //           background: #ffffff;
+    //           color: #333;
+    //           border-radius: 10px;
+    //           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    //           padding: 30px 20px;
+    //           max-width: 600px;
+    //           margin: 50px auto;
+    //         }
+    //         h1 {
+    //           font-size: 24px;
+    //           margin-bottom: 20px;
+    //         }
+    //         p {
+    //           font-size: 16px;
+    //           margin: 10px 0;
+    //         }
+    //         img {
+    //           border-radius: 50%;
+    //           width: 100px;
+    //           height: 100px;
+    //           margin-bottom: 20px;
+    //         }
+    //         button {
+    //           background-color: #4267b2;
+    //           color: white;
+    //           padding: 10px 20px;
+    //           border: none;
+    //           border-radius: 5px;
+    //           cursor: pointer;
+    //           font-size: 16px;
+    //           margin-top: 20px;
+    //           transition: background-color 0.3s ease, transform 0.2s ease;
+    //         }
+    //         button:hover {
+    //           background-color: #365899;
+    //           transform: translateY(-2px);
+    //         }
+    //         button:active {
+    //           transform: translateY(1px);
+    //         }
+    //         label, input {
+    //           display: block;
+    //           margin: 10px auto;
+    //           font-size: 14px;
+    //         }
+    //         input {
+    //           padding: 5px;
+    //           border-radius: 5px;
+    //           border: 1px solid #ddd;
+    //           width: 80%;
+    //           max-width: 300px;
+    //         }
+    //       </style>
+    //     </head>
+    //     <body>
+    //       <div class="container">
+    //         <h1>Welcome ${user.profile.displayName}</h1>
+    //         <img src="${user.profile.photos[0].value}" alt="Profile Picture" />
+    //         <p><strong>Name:</strong> ${user.profile.displayName}</p>
+    //         <p><strong>Email:</strong> ${user.profile.emails[0].value}</p>
+    //         <p><strong>Facebook ID:</strong> ${user.profile.id}</p>
+    //         <a href="/auth/logout">
+    //           <button>Logout</button>
+    //         </a>
             
-            <!-- Insights Section -->
-            <h2>Get Insights</h2>
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" required>
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" required>
-            <button id="insightsButton">Get Insights</button>
-          </div>
+    //         <!-- Insights Section -->
+    //         <h2>Get Insights</h2>
+    //         <label for="startDate">Start Date:</label>
+    //         <input type="date" id="startDate" name="startDate" required>
+    //         <label for="endDate">End Date:</label>
+    //         <input type="date" id="endDate" name="endDate" required>
+    //         <button id="insightsButton">Get Insights</button>
+    //       </div>
     
-          <script>
-            // Add click event listener to the button
-            document.getElementById('insightsButton').addEventListener('click', () => {
-              const startDate = document.getElementById('startDate').value;
-              const endDate = document.getElementById('endDate').value;
+    //       <script>
+    //         // Add click event listener to the button
+    //         document.getElementById('insightsButton').addEventListener('click', () => {
+    //           const startDate = document.getElementById('startDate').value;
+    //           const endDate = document.getElementById('endDate').value;
     
-              // Ensure both dates are selected
-              if (startDate && endDate) {
-                fetch('/auth/insights', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ startDate, endDate })
-                })
-                .then(response => response.json())
-                .then(data => {
-                  alert('Insights data fetched: ' + JSON.stringify(data));
-                })
-                .catch(err => {
-                  console.error('Error fetching insights:', err);
-                  alert('Error fetching insights');
-                });
-              } else {
-                alert('Please select a valid date range');
-              }
+    //           // Ensure both dates are selected
+    //           if (startDate && endDate) {
+    //             fetch('/auth/insights', {
+    //               method: 'POST',
+    //               headers: {
+    //                 'Content-Type': 'application/json'
+    //               },
+    //               body: JSON.stringify({ startDate, endDate })
+    //             })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //               alert('Insights data fetched: ' + JSON.stringify(data));
+    //             })
+    //             .catch(err => {
+    //               console.error('Error fetching insights:', err);
+    //               alert('Error fetching insights');
+    //             });
+    //           } else {
+    //             alert('Please select a valid date range');
+    //           }
+    //         });
+    //       </script>
+    //     </body>
+    //     </html>
+    //   `);
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4267b2, #3b5998);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+          }
+          .container {
+            background: #ffffff;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px 20px;
+            max-width: 600px;
+            margin: 50px auto;
+          }
+          h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+          p {
+            font-size: 16px;
+            margin: 10px 0;
+          }
+          img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+          }
+          button {
+            background-color: #4267b2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+          }
+          button:hover {
+            background-color: #365899;
+            transform: translateY(-2px);
+          }
+          button:active {
+            transform: translateY(1px);
+          }
+          label, input {
+            display: block;
+            margin: 10px auto;
+            font-size: 14px;
+          }
+          input {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 80%;
+            max-width: 300px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Welcome ${user.profile.displayName}</h1>
+          <img src="${user.profile.photos[0].value}" alt="Profile Picture" />
+          <p><strong>Name:</strong> ${user.profile.displayName}</p>
+          <p><strong>Email:</strong> ${user.profile.emails[0].value}</p>
+          <p><strong>Facebook ID:</strong> ${user.profile.id}</p>
+          <a href="/auth/logout">
+            <button>Logout</button>
+          </a>
+          
+          <!-- Insights Section -->
+          <h2>Get Insights</h2>
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate">
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate">
+          <button id="insightsButton">Get Insights</button>
+        </div>
+      
+        <script>
+          document.getElementById('insightsButton').addEventListener('click', () => {
+            let startDate = document.getElementById('startDate').value;
+            let endDate = document.getElementById('endDate').value;
+            
+            // If either date is not provided, default to today's date.
+            const today = new Date().toISOString().split("T")[0];
+            if (!startDate) {
+              startDate = today;
+            }
+            if (!endDate) {
+              endDate = today;
+            }
+      
+            // Proceed to fetch insights with the available (or defaulted) dates.
+            fetch('/auth/insights', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ startDate, endDate })
+            })
+            .then(response => response.json())
+            .then(data => {
+              alert('Insights data fetched: ' + JSON.stringify(data));
+            })
+            .catch(err => {
+              console.error('Error fetching insights:', err);
+              alert('Error fetching insights');
             });
-          </script>
-        </body>
-        </html>
-      `);
+          });
+        </script>
+      </body>
+      </html>
+    `);
+    
 };
   
   exports.logout = (req, res, next) => {
@@ -288,6 +414,15 @@ exports.facebookCallback = (req, res, next) => {
 exports.getInsights = async (req, res) => {
     console.log("inside getInsights")
     const { startDate, endDate } = req.body;
+
+    if (!startDate || !endDate) {
+      const today = new Date().toISOString().split("T")[0];
+      startDate = today;
+      endDate = today;
+    }
+    
+    console.log("startDate:", startDate);
+    console.log("endDate:", endDate);
     console.log("startDate",startDate)
     console.log("endDate",endDate)
     const user = req.user;

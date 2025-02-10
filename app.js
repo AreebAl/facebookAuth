@@ -28,6 +28,7 @@ app.use(passport.session());
 app.use(express.static('public'));
 
 // Use routes
+
 app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
@@ -36,6 +37,7 @@ app.get('/', (req, res) => {
 
 // Start the server
 // const PORT = process.env.PORT || 3000;
+
 // app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
 
